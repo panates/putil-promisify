@@ -7,15 +7,13 @@
     "Eray Hanoglu <e.hanoglu@panates.com>"
   ],
   "license": "MIT",
-  "repository": "panates/putil-waterfall",
+  "repository": "panates/putil-promisify",
   "main": "lib/promisify.js",
   "keywords": [
     "javascript",
     "async",
-    "waterfall",
-    "tasks",
-    "control",
-    "flow"
+    "promise",
+    "promisify"
   ],
   "dependencies": {},
   "devDependencies": {
