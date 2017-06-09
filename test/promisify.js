@@ -4,14 +4,18 @@ const assert = require('assert'),
 
 describe('promisify', function() {
 
-  function callbackFunction(val1, callback) {
+  function resolveFn(val1, callback) {
     callback(undefined, val1);
   }
 
-  it('should success', function(done) {
+  function rejectFn(val1, callback) {
+    callback(new Error('test'), val1);
+  }
+
+  it('should resolve', function(done) {
 
     let promise = Promisify.fromCallback(cb => {
-      callbackFunction(5, cb);
+      resolveFn(5, cb);
     });
 
     promise.then(result => {
@@ -23,15 +27,43 @@ describe('promisify', function() {
     });
   });
 
+  it('should reject', function(done) {
+
+    let promise = Promisify.fromCallback(cb => {
+      rejectFn(5, cb);
+    });
+
+    promise.then(result => {
+      done(new Error('Failed'));
+    }).catch(e => {
+      assert.ok(1, e);
+      done();
+    });
+  });
+
   it('should catch', function(done) {
 
     let promise = Promisify.fromCallback(cb => {
-      callbackFunction(5, cb);
+      resolveFn(5, cb);
     });
 
     promise.then(result => {
       assert.equal(result, 6);
       done();
+    }).catch(e => {
+      assert.ok(1, e);
+      done();
+    });
+  });
+
+  it('should catch', function(done) {
+
+    let promise = Promisify.fromCallback(cb => {
+      throw new Error('test');
+    });
+
+    promise.then(result => {
+      done(new Error('Failed'));
     }).catch(e => {
       assert.ok(1, e);
       done();
