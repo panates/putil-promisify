@@ -14,14 +14,14 @@ describe('promisify', function() {
 
   it('should resolve', function(done) {
 
-    let promise = Promisify.fromCallback(cb => {
+    const promise = Promisify.fromCallback(function(cb) {
       resolveFn(5, cb);
     });
 
-    promise.then(result => {
+    promise.then(function(result) {
       assert.equal(result, 5);
       done();
-    }).catch(e => {
+    }).catch(function(e) {
       assert.ok(0, e);
       done();
     });
@@ -29,13 +29,13 @@ describe('promisify', function() {
 
   it('should reject', function(done) {
 
-    let promise = Promisify.fromCallback(cb => {
+    const promise = Promisify.fromCallback(function(cb) {
       rejectFn(5, cb);
     });
 
-    promise.then(result => {
+    promise.then(function(result) {
       done(new Error('Failed'));
-    }).catch(e => {
+    }).catch(function(e) {
       assert.ok(1, e);
       done();
     });
@@ -43,31 +43,50 @@ describe('promisify', function() {
 
   it('should catch', function(done) {
 
-    let promise = Promisify.fromCallback(cb => {
+    const promise = Promisify.fromCallback(function(cb) {
       resolveFn(5, cb);
     });
 
-    promise.then(result => {
+    promise.then(function(result) {
       assert.equal(result, 6);
       done();
-    }).catch(e => {
+    }).catch(function(e) {
       assert.ok(1, e);
       done();
     });
   });
 
   it('should catch', function(done) {
-
-    let promise = Promisify.fromCallback(cb => {
+    const promise = Promisify.fromCallback(function(cb) {
       throw new Error('test');
     });
 
-    promise.then(result => {
+    promise.then(function(result) {
       done(new Error('Failed'));
-    }).catch(e => {
+    }).catch(function(e) {
       assert.ok(1, e);
       done();
     });
+  });
+
+  it('should return isPromise(promise) === true', function(done) {
+    assert.ok(Promisify.isPromise(new Promise(function() {})));
+    done();
+  });
+
+  it('should return isPromise(externalPromise) === true', function(done) {
+    assert.ok(Promisify.isPromise({
+      then: function() {
+      },
+      catch: function() {
+      }
+    }));
+    done();
+  });
+
+  it('should return isPromise(!promise) === false', function(done) {
+    assert.ok(!Promisify.isPromise({}));
+    done();
   });
 
 });

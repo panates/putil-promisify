@@ -17,14 +17,14 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "babel-eslint": "^7.2.3",
-    "eslint": "^4.1.1",
-    "eslint-config-google": "^0.8.0",
+    "babel-eslint": "^8.0.1",
+    "eslint": "^4.9.0",
+    "eslint-config-google": "^0.9.1",
     "istanbul": "^0.4.5",
-    "mocha": "^3.4.2"
+    "mocha": "^4.0.1"
   },
   "engines": {
-    "node": ">= 6.0"
+    "node": ">= 4.0"
   },
   "directories": {
     "lib": "./lib"
