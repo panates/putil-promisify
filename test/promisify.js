@@ -1,6 +1,6 @@
 /* eslint-disable */
-const assert = require('assert'),
-    Promisify = require('../');
+const assert = require('assert');
+const promisify = require('../');
 
 describe('promisify', function() {
 
@@ -12,14 +12,54 @@ describe('promisify', function() {
     callback(new Error('test'), val1);
   }
 
+  it('should return resolved promise when callback return a value', function() {
+
+    const promise = promisify(() => {
+      return 5;
+    });
+
+    assert(promise instanceof Promise);
+    promise.then((result) => {
+      assert.strictEqual(result, 5);
+    });
+  });
+
+  it('should return resolved promise when callback returns resolved promise', function() {
+
+    const promise = promisify(() => {
+      return Promise.resolve(5);
+    });
+
+    assert(promise instanceof Promise);
+    promise.then((result) => {
+      assert.strictEqual(result, 5);
+    });
+  });
+
+  it('should return rejected promise when callback throws error', function() {
+    const promise = promisify(() => {
+      throw new Error('Any error');
+    });
+    assert(promise instanceof Promise);
+    assert.rejects(promise);
+  });
+
+  it('should return rejected promise callback returns rejected promise', function() {
+    const promise = promisify(() => {
+      return Promise.reject(new Error('Any error'));
+    });
+    assert(promise instanceof Promise);
+    assert.rejects(promise);
+  });
+
   it('should resolve', function(done) {
 
-    const promise = Promisify.fromCallback(function(cb) {
+    const promise = promisify.fromCallback((cb) => {
       resolveFn(5, cb);
     });
 
     promise.then(function(result) {
-      assert.equal(result, 5);
+      assert.strictEqual(result, 5);
       done();
     }).catch(function(e) {
       assert.ok(0, e);
@@ -29,13 +69,13 @@ describe('promisify', function() {
 
   it('should reject', function(done) {
 
-    const promise = Promisify.fromCallback(function(cb) {
+    const promise = promisify.fromCallback((cb) => {
       rejectFn(5, cb);
     });
 
-    promise.then(function(result) {
+    promise.then(function() {
       done(new Error('Failed'));
-    }).catch(function(e) {
+    }).catch((e) => {
       assert.ok(1, e);
       done();
     });
@@ -43,49 +83,47 @@ describe('promisify', function() {
 
   it('should catch', function(done) {
 
-    const promise = Promisify.fromCallback(function(cb) {
+    const promise = promisify.fromCallback(function(cb) {
       resolveFn(5, cb);
     });
 
     promise.then(function(result) {
-      assert.equal(result, 6);
+      assert.strictEqual(result, 6);
       done();
-    }).catch(function(e) {
+    }).catch((e) => {
       assert.ok(1, e);
       done();
     });
   });
 
   it('should catch', function(done) {
-    const promise = Promisify.fromCallback(function(cb) {
+    const promise = promisify.fromCallback(() => {
       throw new Error('test');
     });
 
-    promise.then(function(result) {
+    promise.then(() => {
       done(new Error('Failed'));
-    }).catch(function(e) {
+    }).catch((e) => {
       assert.ok(1, e);
       done();
     });
   });
 
   it('should return isPromise(promise) === true', function(done) {
-    assert.ok(Promisify.isPromise(new Promise(function() {})));
+    assert.ok(promisify.isPromise(new Promise(() => {})));
     done();
   });
 
   it('should return isPromise(externalPromise) === true', function(done) {
-    assert.ok(Promisify.isPromise({
-      then: function() {
-      },
-      catch: function() {
-      }
+    assert.ok(promisify.isPromise({
+      then: () => {},
+      catch: () => {}
     }));
     done();
   });
 
   it('should return isPromise(!promise) === false', function(done) {
-    assert.ok(!Promisify.isPromise({}));
+    assert.ok(!promisify.isPromise({}));
     done();
   });
 
