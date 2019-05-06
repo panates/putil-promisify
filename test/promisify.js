@@ -17,11 +17,9 @@ describe('promisify', function() {
   }
 
   it('should return resolved promise when callback return a value', function() {
-
     const promise = promisify(() => {
       return 5;
     });
-
     assert(promise instanceof Promise);
     promise.then((result) => {
       assert.strictEqual(result, 5);
@@ -29,11 +27,9 @@ describe('promisify', function() {
   });
 
   it('should return resolved promise when callback returns resolved promise', function() {
-
     const promise = promisify(() => {
       return Promise.resolve(5);
     });
-
     assert(promise instanceof Promise);
     promise.then((result) => {
       assert.strictEqual(result, 5);
@@ -56,12 +52,26 @@ describe('promisify', function() {
     assert.rejects(promise);
   });
 
-  it('should resolve', function(done) {
+  it('should return back the given promise', function() {
+    const promise = promisify(Promise.resolve(1));
+    assert(promise instanceof Promise);
+    promise.then((result) => {
+      assert.strictEqual(result, 1);
+    });
+  });
 
+  it('should return resolved promise when argument not a function', function() {
+    const promise = promisify(5);
+    assert(promise instanceof Promise);
+    promise.then((result) => {
+      assert.strictEqual(result, 5);
+    });
+  });
+
+  it('should resolve', function(done) {
     const promise = promisify.fromCallback((cb) => {
       resolveFn(5, cb);
     });
-
     promise.then(function(result) {
       assert.strictEqual(result, 5);
       done();
@@ -72,11 +82,9 @@ describe('promisify', function() {
   });
 
   it('should reject', function(done) {
-
     const promise = promisify.fromCallback((cb) => {
       rejectFn(5, cb);
     });
-
     promise.then(function() {
       done(new Error('Failed'));
     }).catch((e) => {
@@ -86,11 +94,9 @@ describe('promisify', function() {
   });
 
   it('should catch', function(done) {
-
     const promise = promisify.fromCallback(function(cb) {
       resolveFn(5, cb);
     });
-
     promise.then(function(result) {
       assert.strictEqual(result, 6);
       done();
@@ -104,7 +110,6 @@ describe('promisify', function() {
     const promise = promisify.fromCallback(() => {
       throw new Error('test');
     });
-
     promise.then(() => {
       done(new Error('Failed'));
     }).catch((e) => {
