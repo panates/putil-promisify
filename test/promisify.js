@@ -37,7 +37,7 @@ describe('promisify', function() {
       throw new Error('Any error');
     });
     assert(promise instanceof Promise);
-    return assert.rejects(promise);
+    return assert.rejects(() => promise);
   });
 
   it('should return rejected promise callback returns rejected promise', function() {
@@ -45,7 +45,7 @@ describe('promisify', function() {
       return Promise.reject(new Error('Any error'));
     });
     assert(promise instanceof Promise);
-    return assert.rejects(promise);
+    return assert.rejects(() => promise);
   });
 
   it('should return back the given promise', function() {
