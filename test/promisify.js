@@ -101,9 +101,10 @@ describe('promisify', function() {
         d: [Promise.resolve(3), 4]
       },
       c: Promise.resolve(2),
-      e: 5
+      e: 5,
+      f: null
     }).then((o) => {
-      assert.deepStrictEqual(o, {a: {b: 1, d: [3, 4]}, c: 2, e: 5});
+      assert.deepStrictEqual(o, {a: {b: 1, d: [3, 4]}, c: 2, e: 5, f: null});
     });
   });
 
