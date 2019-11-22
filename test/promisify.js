@@ -108,5 +108,23 @@ describe('promisify', function() {
     });
   });
 
+  it('should deepResolve ignore circular references', function() {
+    const a = {
+      b: Promise.resolve(1),
+      d: [Promise.resolve(3), 4]
+    };
+    const b = {a};
+    const obj = {
+      a,
+      b
+    };
+    return promisify.deepResolve(obj).then((o) => {
+      assert.deepStrictEqual(o, {
+        a: {b: 1, d: [3, 4]},
+        b: {a: {b: 1, d: [3, 4]}}
+      });
+    });
+  });
+
 
 });
