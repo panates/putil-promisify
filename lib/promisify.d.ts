@@ -11,5 +11,7 @@ declare namespace promisify {
     export function isPromise(x: any): boolean;
 
     export function deepResolve<T = any>(o: T): Promise<T>;
-    
+
+    export function wait(ms): Promise<void>;
+
 }

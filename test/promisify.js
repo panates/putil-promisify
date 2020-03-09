@@ -18,7 +18,7 @@ describe('promisify', function() {
 
   it('should return resolved promise when callback return a value', function() {
     const promise = promisify(() => 5);
-    assert(promise instanceof Promise);
+    assert.ok(promise instanceof Promise);
     return promise.then((result) => {
       assert.strictEqual(result, 5);
     });
@@ -26,7 +26,7 @@ describe('promisify', function() {
 
   it('should return resolved promise when callback returns resolved promise', function() {
     const promise = promisify(() => Promise.resolve(5));
-    assert(promise instanceof Promise);
+    assert.ok(promise instanceof Promise);
     return promise.then((result) => {
       assert.strictEqual(result, 5);
     });
@@ -36,7 +36,7 @@ describe('promisify', function() {
     const promise = promisify(() => {
       throw new Error('Any error');
     });
-    assert(promise instanceof Promise);
+    assert.ok(promise instanceof Promise);
     return assert.rejects(() => promise);
   });
 
@@ -44,13 +44,13 @@ describe('promisify', function() {
     const promise = promisify(() => {
       return Promise.reject(new Error('Any error'));
     });
-    assert(promise instanceof Promise);
+    assert.ok(promise instanceof Promise);
     return assert.rejects(() => promise);
   });
 
   it('should return back the given promise', function() {
     const promise = promisify(Promise.resolve(1));
-    assert(promise instanceof Promise);
+    assert.ok(promise instanceof Promise);
     return promise.then((result) => {
       assert.strictEqual(result, 1);
     });
@@ -58,7 +58,7 @@ describe('promisify', function() {
 
   it('should return resolved promise when argument not a function', function() {
     const promise = promisify(5);
-    assert(promise instanceof Promise);
+    assert.ok(promise instanceof Promise);
     return promise.then((result) => {
       assert.strictEqual(result, 5);
     });
@@ -80,18 +80,18 @@ describe('promisify', function() {
   });
 
   it('should return isPromise(promise) === true', function() {
-    assert(promisify.isPromise(Promise.resolve(1)));
+    assert.ok(promisify.isPromise(Promise.resolve(1)));
   });
 
   it('should return isPromise(externalPromise) === true', function() {
-    assert(promisify.isPromise({
+    assert.ok(promisify.isPromise({
       then: () => {},
       catch: () => {}
     }));
   });
 
   it('should return isPromise(!promise) === false', function() {
-    assert(!promisify.isPromise({}));
+    assert.ok(!promisify.isPromise({}));
   });
 
   it('should deep resolve promises', function() {
@@ -124,6 +124,12 @@ describe('promisify', function() {
         b: {a: {b: 1, d: [3, 4]}}
       });
     });
+  });
+
+  it('should wait()', async function() {
+    const t = Date.now();
+    await promisify.wait(250);
+    assert.ok(Date.now() - t >= 250);
   });
 
 
