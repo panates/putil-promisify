@@ -133,8 +133,14 @@ describe('promisify', function() {
   });
 
   it('should await resolve promise and call the callback', function(done) {
-    const promise = promisify(Promise.resolve(1));
+    const promise = Promise.resolve(1);
     promisify.await(promise, done);
+  });
+
+  it('should await ignore errors if no callback given', function(done) {
+    const promise = Promise.reject();
+    promisify.await(promise)
+        .then(() => done());
   });
 
 

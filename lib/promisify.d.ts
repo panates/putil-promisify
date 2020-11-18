@@ -14,7 +14,7 @@ declare namespace promisify {
 
     export function deepResolve<T = any>(o: T): Promise<T>;
 
-    export function await<T = any>(x: any, callback: Callback<T>): Promise<void>;
+    export function await<T = any>(x: any, callback?: Callback<T>): Promise<void> | void;
 
     export function wait(ms): Promise<void>;
 
