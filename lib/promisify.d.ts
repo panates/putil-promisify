@@ -2,7 +2,7 @@ export as namespace promisify;
 
 export = promisify;
 
-declare function promisify(fn: () => any);
+declare function promisify<T = any>(fn: () => any): Promise<T>;
 
 declare namespace promisify {
 
