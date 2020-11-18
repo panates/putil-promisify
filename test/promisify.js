@@ -132,15 +132,19 @@ describe('promisify', function() {
     assert.ok(Date.now() - t >= 250);
   });
 
-  it('should await resolve promise and call the callback', function(done) {
+  it('should await() resolve promise and call the callback', function(done) {
     const promise = Promise.resolve(1);
     promisify.await(promise, done);
   });
 
-  it('should await ignore errors if no callback given', function(done) {
+  it('should await() ignore errors if no callback given', function(done) {
     const promise = Promise.reject();
     promisify.await(promise)
         .then(() => done());
+  });
+
+  it('should await() call callback if arguments is not a promise', function(done) {
+    promisify.await(1, done);
   });
 
 
