@@ -126,10 +126,15 @@ describe('promisify', function() {
     });
   });
 
-  it('should wait()', async function() {
+  it('should wait() create a promise that resolve at given ms later', async function() {
     const t = Date.now();
     await promisify.wait(250);
     assert.ok(Date.now() - t >= 250);
+  });
+
+  it('should await resolve promise and call the callback', function(done) {
+    const promise = promisify(Promise.resolve(1));
+    promisify.await(promise, done);
   });
 
 
