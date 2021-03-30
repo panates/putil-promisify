@@ -4,7 +4,6 @@ node_js:
   - "11"
   - "12"
   - "stable"
-sudo: false
 cache:
   directories:
     - "$HOME/.npm"

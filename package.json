@@ -15,7 +15,6 @@
     "promise",
     "promisify"
   ],
-  "dependencies": {},
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "eslint": "^7.13.0",
