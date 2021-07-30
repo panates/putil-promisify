@@ -10,7 +10,7 @@ declare namespace promisify {
 
     export function fromCallback<T = any>(cb: (error, value: T) => void): Promise<T>;
 
-    export function isPromise(x: any): boolean;
+    export function isPromise(x: any): x is Promise<any>;
 
     export function deepResolve<T = any>(o: T): Promise<T>;
 
