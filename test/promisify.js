@@ -1,10 +1,5 @@
-/* eslint-disable */
 const assert = require('assert');
 const promisify = require('../');
-const {rejects, doesNotReject} = require('rejected-or-not');
-
-assert.rejects = assert.rejects || rejects;
-assert.doesNotReject = assert.doesNotReject || doesNotReject;
 
 describe('promisify', function() {
 
@@ -132,13 +127,13 @@ describe('promisify', function() {
     assert.ok(Date.now() - t >= 250);
   });
 
-  it('should await() resolve promise and call the callback', function(done) {
+  it('should await() resolve promise and call the callback', (done) => {
     const promise = Promise.resolve(1);
     promisify.await(promise, done);
   });
 
   it('should await() ignore errors if no callback given', function(done) {
-    const promise = Promise.reject();
+    const promise = Promise.reject(new Error());
     promisify.await(promise)
         .then(() => done());
   });
